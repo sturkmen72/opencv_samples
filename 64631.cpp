@@ -11,14 +11,16 @@ int main(int argc, char** argv)
 
     Mat frame[5];
 
-    for(int i; i<5; i++ )
+    for(int i=0; i<5; )
     {
-        cap >> frame[i];
-    }
 
-    for(int i; i<5; i++ )
-    {
-        imshow(format("Frame - %d",i), frame[i]);
+        cap >> frame[i];
+
+        if( !frame[i].empty() )
+        {
+            imshow(format("Frame - %d",i), frame[i]);
+            i++;
+        }
     }
 
     waitKey();
