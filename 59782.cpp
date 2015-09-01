@@ -1,4 +1,4 @@
-
+#include "qa.hpp"
 #include "opencv/highgui.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
@@ -13,7 +13,15 @@
 using namespace cv;
 using namespace std;
 RNG rng(12345);
-int main ()
+
+#if QA_MULTI_DEMO
+int main( int argc, char** argv )
+{
+    a59782( argc, argv );
+}
+#endif
+
+int a59782( int argc, char** argv )
  {
     cvNamedWindow( "RGB", 1 );
     //cvNamedWindow( "HSV", 1 );
@@ -65,7 +73,7 @@ int main ()
 
 
     Mat drawing = Mat::zeros( imgToProcess.size(), CV_8UC3 );
-    for( int i = 0; i< contours.size(); i++ )
+    for( size_t i = 0; i< contours.size(); i++ )
      {
        Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
        drawContours( drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
@@ -80,6 +88,6 @@ int main ()
 
 
     //wait for key press
-    cvWaitKey();
+    waitKey();
     return 0;
  }

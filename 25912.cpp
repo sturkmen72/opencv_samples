@@ -7,8 +7,6 @@
 using namespace cv;
 using namespace std;
 
-Mat src,gray,small,srcclone;
-
 static void detect(Mat src)
 {
     Mat tmp,thr;
@@ -26,7 +24,7 @@ static void detect(Mat src)
 
     findContours( thr, contours, hierarchy,CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE ); //Find contour
 
-    for( int i = 0; i< contours.size(); i++ )
+    for( size_t i = 0; i< contours.size(); i++ )
     {
         drawContours( dst,contours, i, Scalar(255,255,255),CV_FILLED, 8, hierarchy ); // Draw contour with  thickness = filled
         Rect r= boundingRect(contours[i]); // Find bounding rect
@@ -48,11 +46,18 @@ static void detect(Mat src)
 
 }
 
-
+#if QA_MULTI_DEMO
 int main( int argc, char** argv )
 {
+    a25912( argc, argv );
+}
+#endif
+
+int a25912( int argc, char** argv )
+{
     char* filename = argc >= 2 ? argv[1] : (char*)"25912.png";
-    src = imread(filename);
+
+    Mat src = imread(filename);
     if(src.empty())
     {
         cout << "Could not read input image file: " << endl;
@@ -60,6 +65,7 @@ int main( int argc, char** argv )
     }
 
     imshow("source",src);
+
     detect(src);
 
     moveWindow("source",40,40);

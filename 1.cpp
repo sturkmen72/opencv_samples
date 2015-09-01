@@ -1,8 +1,18 @@
-#include "opencv2/opencv.hpp"
+#include "qa.hpp"
+#include "opencv2/highgui.hpp"
+
 using namespace cv;
-int main(int argc, char** argv)
+
+#if QA_MULTI_DEMO
+int main( int argc, char** argv )
 {
- cv::VideoCapture cap(WINRT_VIDEO | 1); //cv::VideoCapture cap(CV_CAP_DSHOW | 1);
+   a1( argc, argv );
+}
+#endif
+
+int a1( int argc, char** argv )
+{
+ cv::VideoCapture cap(0);
 
    // VideoCapture cap;
     // open the default camera, use something different from 0 otherwise;

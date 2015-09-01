@@ -1,3 +1,4 @@
+#include "qa.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/calib3d.hpp"
@@ -56,8 +57,11 @@ bool detectAndDrawCentersOfCircles()
     waitKey(0);
 }
 
-int main()
+#if QA_MULTI_DEMO
+int main( int argc, char** argv )
 {
     detectAndDrawChessboardCorners();
     detectAndDrawCentersOfCircles();
 }
+#endif
+

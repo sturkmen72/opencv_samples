@@ -1,6 +1,7 @@
 // experimental code
 // http://answers.opencv.org/question/65164
 
+#include "qa.hpp"
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -20,8 +21,15 @@ static double angle(Point pt1, Point pt2, Point pt0)
     return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
 }
 
-
+#if QA_MULTI_DEMO
 int main( int argc, char** argv )
+{
+   a65164( argc, argv );
+   a65164a( argc, argv );
+}
+#endif
+
+int a65164( int argc, char** argv )
 {
     char* filename = argc >= 2 ? argv[1] : (char*)"65164.png";
     Mat img = imread(filename);
@@ -48,7 +56,7 @@ int main( int argc, char** argv )
     vector<Point> approx;
     Mat dst = src.clone();
 
-    for (int i = 0; i < contours.size(); i++)
+    for ( size_t i = 0; i < contours.size(); i++)
     {
         // Approximate contour with accuracy proportional
         // to the contour perimeter
@@ -92,6 +100,101 @@ int main( int argc, char** argv )
     imwrite("result-65164.jpg",src);
     imshow("result", src);
     moveWindow("result",img.cols/2,100);
+    waitKey(0);
+    return 0;
+}
+
+int a65164a( int argc, char** argv )
+{
+    char* filename = argc >= 2 ? argv[1] : (char*)"65164.png";
+    Mat img = imread(filename);
+    if (img.empty())
+        return -1;
+
+    Mat src,gray;
+
+    resize(img, src, Size(img.cols/1, img.rows/1)); // resize image to fit display
+
+    cvtColor(src, gray, CV_BGR2GRAY); // Convert to grayscale
+
+    // Use Canny instead of threshold to catch squares with gradient shading
+    Mat bw;
+    Canny(gray, bw, 0, 50, 5);
+
+    // Find contours
+    vector<vector<Point> > contours;
+    findContours(bw.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+
+    vector<Point> squares;
+    vector<Point> approx;
+    Mat dst = src.clone();
+
+    vector<Point> selected;
+
+
+    for (size_t i = 0; i < contours.size(); i++)
+    {
+        // Approximate contour with accuracy proportional
+        // to the contour perimeter
+        approxPolyDP(Mat(contours[i]), approx, arcLength(Mat(contours[i]), true)*0.02, true);
+
+
+
+        selected.insert(selected.end(), approx.begin(), approx.end());
+
+        // Skip small or non-convex objects
+        if (fabs(contourArea(contours[i])) < 100 || !isContourConvex(approx))
+            continue;
+
+        if (approx.size() == 4 )
+        {
+            // Number of vertices of polygonal curve
+            int vtc = approx.size();
+
+            // Get the cosines of all corners
+            vector<double> cos;
+            for (int j = 2; j < vtc+1; j++)
+                cos.push_back(angle(approx[j%vtc], approx[j-2], approx[j-1]));
+
+            // Sort ascending the cosine values
+            sort(cos.begin(), cos.end());
+
+            // Get the lowest and the highest cosine
+            double mincos = cos.front();
+            double maxcos = cos.back();
+
+            if (vtc == 4 && mincos >= -0.1 && maxcos <= 0.3)
+
+            {
+                for(int j=0; j<4 ; j++ )
+                    squares.push_back(approx[j]);
+
+                drawContours( src, contours, i, Scalar(0,0,255), CV_FILLED, 8 );
+            }
+        }
+    }
+
+        for(size_t c=0; c<selected.size() ; c++ )
+        {
+        circle( src, selected[c], 3, Scalar(0,255,0), -1 );
+
+        imshow("result-2", src);
+        waitKey(200);
+        }
+        for(size_t c=0; c<squares.size() ; c++ )
+        {
+        circle( src, squares[c], 3, Scalar(255,0,0), -1 );
+
+        imshow("result-2", src);
+        waitKey(300);
+        }
+    Rect box = boundingRect(selected);
+
+    //  Rect box = boundingRect(Mat(squares));
+    rectangle(src,box,Scalar(0,255,0),1);
+
+    imwrite("result-65164a.jpg",src);
+    imshow("result-2", src);
     waitKey(0);
     return 0;
 }

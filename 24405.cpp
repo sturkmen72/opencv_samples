@@ -1,3 +1,4 @@
+#include "qa.hpp"
 #include <iostream>
 #include "opencv2/opencv.hpp"
 #include <stdio.h>
@@ -97,7 +98,15 @@ showImage();
 
 
 }
-int main(int argc, char**argv)
+
+#if QA_MULTI_DEMO
+int main( int argc, char** argv )
+{
+   a24405( argc, argv );
+}
+#endif
+
+int a24405(int argc, char** argv)
 {
 
     cout<<"Click and drag for Selection"<<endl<<endl;

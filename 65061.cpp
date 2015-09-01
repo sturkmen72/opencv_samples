@@ -1,3 +1,4 @@
+#include "qa.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 
@@ -15,7 +16,7 @@ void step2(Mat src)
 
     findContours( gray, contours, hierarchy,CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
 
-    for( int i = 0; i< contours.size(); i=hierarchy[i][0] )
+    for( size_t i = 0; i< contours.size(); i=hierarchy[i][0] )
     {
         Rect r= boundingRect(contours[i]);
         rectangle(src,Point(r.x,r.y), Point(r.x+r.width,r.y+r.height), Scalar(0,0,255),1,8,0);
@@ -26,7 +27,14 @@ void step2(Mat src)
 
 }
 
+#if QA_MULTI_DEMO
 int main( int argc, char** argv )
+{
+    a65061( argc, argv );
+}
+#endif
+
+int a65061( int argc, char** argv )
 {
     char* filename = argc >= 2 ? argv[1] : (char*)"65061.png";
     Mat src = imread( filename ,1 ),gray,temp;
@@ -41,12 +49,10 @@ int main( int argc, char** argv )
     findContours( gray, contours, hierarchy,
                   CV_RETR_CCOMP, CHAIN_APPROX_SIMPLE );
 
-
     Rect minRect;
 
     if (contours.size()>0)
     {
-
         for( size_t i = 0; i<contours.size() ; i++ )
         {
             minRect = boundingRect( Mat(contours[i]) );
@@ -60,13 +66,12 @@ int main( int argc, char** argv )
                 imwrite("result-65061-1.jpg",src);
 
                 step2(src);
-  moveWindow("Source",50,50);
-  moveWindow("step 1 result",370,50);
-  moveWindow("step 2 result",690,50);
+                moveWindow("Source",50,50);
+                moveWindow("step 1 result",370,50);
+                moveWindow("step 2 result",690,50);
                 waitKey(0);
             }
-
         }
-
     }
+    return 0;
 }

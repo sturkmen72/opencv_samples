@@ -1,3 +1,4 @@
+#include "qa.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 
@@ -60,8 +61,14 @@ static Rect pointSetBoundingRect( const Mat& points , Mat m)
 }
 
 
-
+#if QA_MULTI_DEMO
 int main( int argc, char** argv )
+{
+   apointSetBoundingRect( argc, argv );
+}
+#endif
+
+int apointSetBoundingRect(int argc, char** argv)
 {
     Mat src;
     // the first command-line parameter must be a filename of the binary
@@ -102,8 +109,10 @@ int main( int argc, char** argv )
 
     imshow( "contours", dst );
 
-    moveWindow("Source",40,40);
-    moveWindow("contours",550,40);
+    moveWindow( "Source", 40, 40 );
+    moveWindow( "contours", 550, 40 );
 
     waitKey(0);
+
+    return 0;
 }

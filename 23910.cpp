@@ -1,11 +1,18 @@
-#include <iostream>
-#include <stdio.h>
-#include <opencv2/opencv.hpp>
+#include "qa.hpp"
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 using namespace cv;
 using namespace std;
 
+#if QA_MULTI_DEMO
 int main( int argc, char** argv )
+{
+    a23910( argc, argv );
+}
+#endif
+
+int a23910( int argc, char** argv )
 {
   Mat edge,dst,threshold;
   Mat HSV;

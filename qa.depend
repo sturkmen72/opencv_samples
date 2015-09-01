@@ -1,0 +1,103 @@
+# depslib dependency file v1.0
+1440349969 source:c:\users\gm\desktop\qa\1.cpp
+	"qa.hpp"
+	"opencv2/highgui.hpp"
+
+1440349990 source:c:\users\gm\desktop\qa\5147.cpp
+	"qa.hpp"
+	"opencv2/core.hpp"
+	<iostream>
+
+1440352760 source:c:\users\gm\desktop\qa\main.cpp
+	"qa.hpp"
+	"opencv2/highgui.hpp"
+
+1440352735 c:\users\gm\desktop\qa\qa.hpp
+
+1440352861 source:c:\users\gm\desktop\qa\bitwisesample.cpp
+	"qa.hpp"
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+
+1440798096 source:d:\opencv_samples\1.cpp
+	"qa.hpp"
+	"opencv2/highgui.hpp"
+
+1440837312 d:\opencv_samples\qa.hpp
+
+1440790383 source:d:\opencv_samples\5147.cpp
+	"qa.hpp"
+	"opencv2/core.hpp"
+	<iostream>
+
+1440837315 source:d:\opencv_samples\main.cpp
+	"qa.hpp"
+	"opencv2/highgui.hpp"
+
+1440790378 source:d:\opencv_samples\bitwisesample.cpp
+	"qa.hpp"
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+
+1440790380 source:d:\opencv_samples\69434.cpp
+	"qa.hpp"
+	"opencv2/highgui/highgui.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+
+1440790374 source:d:\opencv_samples\pointsetboundingrect.cpp
+	"qa.hpp"
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+
+1440779876 source:d:\opencv_samples\24463.cpp
+	"qa.hpp"
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	<iostream>
+
+1440791659 source:d:\opencv_samples\65061.cpp
+	"qa.hpp"
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+
+1440792402 source:d:\opencv_samples\23910.cpp
+	"qa.hpp"
+	<opencv2/highgui.hpp>
+	<opencv2/imgproc.hpp>
+
+1440798453 source:d:\opencv_samples\25912.cpp
+	<opencv2/core/utility.hpp>
+	"opencv2/imgproc.hpp"
+	"opencv2/imgcodecs.hpp"
+	"opencv2/highgui.hpp"
+	<iostream>
+
+1440791999 source:d:\opencv_samples\findchessboardcorners.cpp
+	"opencv2/imgproc.hpp"
+	"opencv2/highgui.hpp"
+	"opencv2/calib3d.hpp"
+
+1440797765 source:d:\opencv_samples\59782.cpp
+	"qa.hpp"
+	"opencv/highgui.h"
+	"opencv2/opencv.hpp"
+	"opencv2/core/core.hpp"
+	"opencv2/opencv.hpp"
+	"opencv2/highgui/highgui.hpp"
+	"opencv2/imgproc/imgproc.hpp"
+	"iostream"
+	"stdio.h"
+	"string"
+	<stdlib.h>
+
+1440798190 source:d:\opencv_samples\24405.cpp
+	"qa.hpp"
+	<iostream>
+	"opencv2/opencv.hpp"
+	<stdio.h>
+
+1440837902 source:d:\opencv_samples\65164.cpp
+	"qa.hpp"
+	<opencv2/highgui/highgui.hpp>
+	<opencv2/imgproc/imgproc.hpp>
+
