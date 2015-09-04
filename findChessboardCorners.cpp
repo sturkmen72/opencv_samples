@@ -34,7 +34,7 @@ bool detectAndDrawChessboardCorners()
     imshow("result",img);
     moveWindow("result",img.cols/2,100);
     waitKey(0);
-
+    return true;
 }
 
 //Sample usage of detecting and drawing the centers of circles
@@ -55,6 +55,7 @@ bool detectAndDrawCentersOfCircles()
     imshow("result",img);
 
     waitKey(0);
+    return true;
 }
 
 #if QA_MULTI_DEMO

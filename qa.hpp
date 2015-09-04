@@ -1,4 +1,5 @@
-#define QA_MULTI_DEMO true
+#define QA_MULTI_DEMO false
+
 
 int a1( int argc, char** argv );
 int a5147( int argc, char** argv );
@@ -15,3 +16,7 @@ int a59782( int argc, char** argv );
 int a24405( int argc, char** argv );
 int a65164( int argc, char** argv );
 int a65164a( int argc, char** argv );
+int a68942( int argc, char** argv );
+int a66209( int argc, char** argv );
+
+

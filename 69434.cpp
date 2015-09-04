@@ -13,7 +13,9 @@ int main( int argc, char** argv )
 
 int a69434( int argc, char** argv )
 {
-    Mat img = imread( "69434.png", IMREAD_ANYCOLOR );
+    char* filename = argc >= 2 ? argv[1] : (char*)"69434.png";
+
+    Mat img = imread( filename, IMREAD_ANYCOLOR );
     Mat imgHSV, imgRGB;
 
     cvtColor( img, imgHSV, COLOR_BGR2HSV );

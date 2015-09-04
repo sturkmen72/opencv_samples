@@ -22,7 +22,7 @@ int main( int argc, char** argv )
 #endif
 
 int a59782( int argc, char** argv )
- {
+{
     cvNamedWindow( "RGB", 1 );
     //cvNamedWindow( "HSV", 1 );
     //cvNamedWindow( "Binary", 1 );
@@ -31,8 +31,10 @@ int a59782( int argc, char** argv )
     //cvNamedWindow( "Final", 1 );
     Mat img,hsv,binary,binary1,imgToProcess;
 
-    img = imread("59782.png"); //change this path according to your image file path
-   imshow("RGB",img);
+    char* filename = argc >= 2 ? argv[1] : (char*)"59782.png";
+
+    img = imread( filename, 1 );
+    imshow("RGB",img);
 
     //convert RGB image into HSV image
     cvtColor(img, hsv, CV_BGR2HSV);
@@ -40,15 +42,15 @@ int a59782( int argc, char** argv )
 
     //get binary image
     inRange(hsv, Scalar(0, 85, 241), Scalar(18, 255, 255), binary);
-        // imshow("Binary",binary);
+    // imshow("Binary",binary);
     inRange(hsv, Scalar(171, 0, 0), Scalar(255, 255, 255), binary1);
 
     //binary.copyTo(binary1);
     //imshow("Binary1",binary1);
-     add(binary1, binary, imgToProcess, noArray(), 8);
+    add(binary1, binary, imgToProcess, noArray(), 8);
 
-     //absdiff(binary1, binary, imgToProcess);
-     imshow("Binary2",imgToProcess);
+    //absdiff(binary1, binary, imgToProcess);
+    imshow("Binary2",imgToProcess);
 
 
     //find contours from binary image
@@ -65,29 +67,30 @@ int a59782( int argc, char** argv )
     vector<Point2f>center( contours.size() );
 
     for( size_t i = 0; i < contours.size(); i++ )
-     { approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
-       boundRect[i] = boundingRect( Mat(contours_poly[i]) );
-       minEnclosingCircle( contours_poly[i], center[i], radius[i] );
-       area[i]= contourArea(Mat(contours_poly[i]));
-     }
+    {
+        approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
+        boundRect[i] = boundingRect( Mat(contours_poly[i]) );
+        minEnclosingCircle( contours_poly[i], center[i], radius[i] );
+        area[i]= contourArea(Mat(contours_poly[i]));
+    }
 
 
     Mat drawing = Mat::zeros( imgToProcess.size(), CV_8UC3 );
     for( size_t i = 0; i< contours.size(); i++ )
-     {
-       Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-       drawContours( drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-       ellipse( drawing, minEllipse[i], color, 2, 8 );// ellipse
-       rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
-    //Point2f rect_points[4]; minRect[i].points( rect_points );
-     //for( int j = 0; j < 4; j++ )
-       //   line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1, 8 );
+    {
+        Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+        drawContours( drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+        ellipse( drawing, minEllipse[i], color, 2, 8 );// ellipse
+        rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
+        //Point2f rect_points[4]; minRect[i].points( rect_points );
+        //for( int j = 0; j < 4; j++ )
+        //   line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1, 8 );
 
-         }
+    }
     imshow("Contour",drawing);
 
 
     //wait for key press
     waitKey();
     return 0;
- }
+}

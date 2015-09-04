@@ -20,7 +20,7 @@ int a23910( int argc, char** argv )
 
   char* filename = argc >= 2 ? argv[1] : (char*)"23910.jpg";
 
-  Mat src = imread( filename,1);
+  Mat src = imread( filename, 1 );
 
   imshow( "source", src );
   blur( src, src, Size(2,2) );

@@ -6,6 +6,12 @@ using namespace std;
 
 int main( int argc, char** argv )
 {
+    a68942( argc, argv );
+    destroyAllWindows();
+
+    a66209( argc, argv );
+    destroyAllWindows();
+
     a65164( argc, argv );
     a65164a( argc, argv );
     destroyAllWindows();

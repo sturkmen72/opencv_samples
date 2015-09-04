@@ -6,7 +6,6 @@
 using namespace std;
 using namespace cv;
 
-
 Mat src,img,ROI;
 Rect cropRect(0,0,0,0);
  Point P1(0,0);

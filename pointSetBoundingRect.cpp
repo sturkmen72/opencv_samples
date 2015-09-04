@@ -64,17 +64,14 @@ static Rect pointSetBoundingRect( const Mat& points , Mat m)
 #if QA_MULTI_DEMO
 int main( int argc, char** argv )
 {
-   apointSetBoundingRect( argc, argv );
+    apointSetBoundingRect( argc, argv );
 }
 #endif
 
 int apointSetBoundingRect(int argc, char** argv)
 {
-    Mat src;
-    // the first command-line parameter must be a filename of the binary
-    // (black-n-white) image
-    if( argc != 2 || !(src=imread(argv[1], 0)).data)
-        src=imread("extremepoints.jpg", 0);
+    char* filename = argc >= 2 ? argv[1] : (char*)"extremepoints.jpg";
+    Mat src=imread( filename, 0 );
 
     Mat dst = Mat::zeros(src.rows, src.cols, CV_8UC3);
 
