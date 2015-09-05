@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Release">
-				<Option output="qa1" prefix_auto="1" extension_auto="1" />
+				<Option output="qa" prefix_auto="1" extension_auto="1" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -31,6 +31,8 @@
 		<Unit filename="59782.cpp" />
 		<Unit filename="65061.cpp" />
 		<Unit filename="65164.cpp" />
+		<Unit filename="66209.cpp" />
+		<Unit filename="68942.cpp" />
 		<Unit filename="69434.cpp" />
 		<Unit filename="bitwisesample.cpp" />
 		<Unit filename="findChessboardCorners.cpp" />

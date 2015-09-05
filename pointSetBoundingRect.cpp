@@ -70,7 +70,7 @@ int main( int argc, char** argv )
 
 int apointSetBoundingRect(int argc, char** argv)
 {
-    char* filename = argc >= 2 ? argv[1] : (char*)"extremepoints.jpg";
+    char* filename = argc >= 2 ? argv[1] : (char*)"24463.jpg";
     Mat src=imread( filename, 0 );
 
     Mat dst = Mat::zeros(src.rows, src.cols, CV_8UC3);

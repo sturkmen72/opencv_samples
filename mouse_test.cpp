@@ -3,8 +3,6 @@
 
 using namespace cv;
 
-Mat img( 600, 600, CV_8UC3 );
-
 String winName = "Mouse Events Test";
 
 String MouseEventNames[] =
@@ -38,9 +36,17 @@ void onMouse( int event, int x, int y, int flags, void* userdata )
     int i;
     Scalar color;
 
+    Mat img = *((Mat *)userdata);
+    Vec3b pixel = img.at<Vec3b>(y,x);
+
+
+
     if( ( event > 0 ) || ( y < 300 ) ) // disable EVENT_MOUSEMOVE event on bottom part of the window.
     {
         img.setTo( Scalar( 220, 220, 220 ) );
+        color = Scalar( pixel[0], pixel[1],pixel[2] );
+        putText( img, "Color of this text will change according pixel value of the mouse pointer", Point( 40,580 ) , FONT_HERSHEY_SIMPLEX, .4, color, 1 );
+
         color = Scalar( 255, 0, 0 );
         line( img, Point( 0, 300 ), Point( 600, 300 ), color, 2 );
         putText( img, "EVENT_MOUSEMOVE event is disabled", Point( 300,320 ) , FONT_HERSHEY_SIMPLEX, .5, color, 1 );
@@ -68,11 +74,12 @@ void onMouse( int event, int x, int y, int flags, void* userdata )
 
 int main( int argc, char**argv )
 {
+    Mat image( 600, 600, CV_8UC3 );
     namedWindow( winName, WINDOW_AUTOSIZE );
 
-    setMouseCallback( winName, onMouse, &img );
+    setMouseCallback( winName, onMouse, &image );
 
-    imshow( winName, img );
+    imshow( winName, image );
 
     waitKey();
 
