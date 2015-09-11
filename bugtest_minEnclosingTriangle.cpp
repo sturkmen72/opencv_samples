@@ -731,7 +731,7 @@ static bool isValidMinimalTriangle(const cv::Point2f &vertexA, const cv::Point2f
                           : (isPointOnLineSegment(midpointSideB, sideBStartVertex, sideBEndVertex));
 
     //bool sideCValid = isPointOnLineSegment(midpointSideC, sideCStartVertex, sideCEndVertex);
-    bool sideCValid = (validationFlag == VALIDATION_SIDES_FLUSH) || (isPointOnLineSegment(midpointSideC, sideCStartVertex, sideCEndVertex));
+    bool sideCValid = (validationFlag == VALIDATION_SIDES_FLUSH) || isPointOnLineSegment(midpointSideC, sideCStartVertex, sideCEndVertex);
 
     return (sideAValid && sideBValid && sideCValid);
 }
@@ -1760,7 +1760,7 @@ int main( int argc, char* argv[] )
             cout << triangle2 << "\n";
             cout << polygon << "\n";
             imshow( "minEnclosingTriangle test - OpenCV", img );
-            waitKey(2000);
+            waitKey(3000);
         }
 
         imshow( "minEnclosingTriangle test - OpenCV", img );
