@@ -72,6 +72,8 @@
 #include "opencv2/imgproc/imgproc.hpp"
 
 #include <iostream>
+#include <fstream>  // file
+
 
 ///////////////////////////////// Constants definitions //////////////////////////////////
 
@@ -298,8 +300,7 @@ static void updateSidesCA(const std::vector<cv::Point2f> &polygon,
 /*!
 * @param points         Set of points
 * @param triangle       Minimum area triangle enclosing the given set of points
-*/
-/*
+
 double cv::minEnclosingTriangle(cv::InputArray points, CV_OUT cv::OutputArray triangle) {
     double area;
 
@@ -729,7 +730,7 @@ static bool isValidMinimalTriangle(const cv::Point2f &vertexA, const cv::Point2f
                           ? (areEqualPoints(midpointSideB, polygon[b]))
                           : (isPointOnLineSegment(midpointSideB, sideBStartVertex, sideBEndVertex));
 
-//    bool sideCValid = isPointOnLineSegment(midpointSideC, sideCStartVertex, sideCEndVertex);
+    //bool sideCValid = isPointOnLineSegment(midpointSideC, sideCStartVertex, sideCEndVertex);
     bool sideCValid = (validationFlag == VALIDATION_SIDES_FLUSH) || (isPointOnLineSegment(midpointSideC, sideCStartVertex, sideCEndVertex));
 
     return (sideAValid && sideBValid && sideCValid);
@@ -1568,497 +1569,204 @@ static bool lessOrEqual(double number1, double number2) {
 using namespace cv;
 using namespace std;
 
-
 int main( int argc, char* argv[] )
 {
     Mat img(500, 500, CV_8UC3);
 
     RNG& rng = theRNG();
-
     vector<vector<Point> > testpoints;
     vector<Point> points;
 
-    points.push_back(Point(167,178));
-    points.push_back(Point(169,186));
-    points.push_back(Point(184,242));
-    points.push_back(Point(199,242));
-    points.push_back(Point(214,186));
-    points.push_back(Point(223,49));
-    points.push_back(Point(213,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-//    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,224));
-    points.push_back(Point(169,136));
-    points.push_back(Point(184,368));
-    points.push_back(Point(199,277));
-    points.push_back(Point(214,262));
-    points.push_back(Point(223,168));
-    points.push_back(Point(213,158));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,180));
-    points.push_back(Point(169,191));
-    points.push_back(Point(184,285));
-    points.push_back(Point(199,310));
-    points.push_back(Point(214,363));
-    points.push_back(Point(223,369));
-    points.push_back(Point(213,258));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(270,197));
-    points.push_back(Point(195,369));
-    points.push_back(Point(374,358));
-    points.push_back(Point(198,331));
-    points.push_back(Point(291,150));
-    points.push_back(Point(202,139));
-    points.push_back(Point(213,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,178));
-    points.push_back(Point(169,186));
-    points.push_back(Point(184,242));
-    points.push_back(Point(199,242));
-    points.push_back(Point(214,186));
-    points.push_back(Point(223,49));
-    points.push_back(Point(213,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(127,197));
-    points.push_back(Point(168,369));
-    points.push_back(Point(326,358));
-    points.push_back(Point(353,331));
-    points.push_back(Point(364,150));
-    points.push_back(Point(298,139));
-    points.push_back(Point(131,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,197));
-    points.push_back(Point(312,369));
-    points.push_back(Point(145,358));
-    points.push_back(Point(306,331));
-    points.push_back(Point(317,150));
-    points.push_back(Point(225,139));
-    points.push_back(Point(299,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(164,197));
-    points.push_back(Point(237,369));
-    points.push_back(Point(360,358));
-    points.push_back(Point(139,331));
-    points.push_back(Point(320,150));
-    points.push_back(Point(264,139));
-    points.push_back(Point(316,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(354,197));
-    points.push_back(Point(323,369));
-    points.push_back(Point(242,358));
-    points.push_back(Point(346,331));
-    points.push_back(Point(333,150));
-    points.push_back(Point(373,139));
-    points.push_back(Point(262,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(243,197));
-    points.push_back(Point(153,369));
-    points.push_back(Point(175,358));
-    points.push_back(Point(143,331));
-    points.push_back(Point(354,150));
-    points.push_back(Point(253,139));
-    points.push_back(Point(339,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,178));
-    points.push_back(Point(169,186));
-    points.push_back(Point(184,242));
-    points.push_back(Point(199,242));
-    points.push_back(Point(214,186));
-    points.push_back(Point(223,49));
-    points.push_back(Point(213,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(228,178));
-    points.push_back(Point(319,186));
-    points.push_back(Point(321,242));
-    points.push_back(Point(223,242));
-    points.push_back(Point(173,186));
-    points.push_back(Point(336,49));
-    points.push_back(Point(253,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(249,178));
-    points.push_back(Point(313,186));
-    points.push_back(Point(313,242));
-    points.push_back(Point(245,242));
-    points.push_back(Point(248,186));
-    points.push_back(Point(181,49));
-    points.push_back(Point(229,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(233,178));
-    points.push_back(Point(163,186));
-    points.push_back(Point(303,242));
-    points.push_back(Point(273,242));
-    points.push_back(Point(350,186));
-    points.push_back(Point(260,49));
-    points.push_back(Point(150,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(206,178));
-    points.push_back(Point(364,186));
-    points.push_back(Point(187,242));
-    points.push_back(Point(127,242));
-    points.push_back(Point(298,186));
-    points.push_back(Point(150,49));
-    points.push_back(Point(266,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(223,178));
-    points.push_back(Point(316,186));
-    points.push_back(Point(350,242));
-    points.push_back(Point(180,242));
-    points.push_back(Point(322,186));
-    points.push_back(Point(231,49));
-    points.push_back(Point(140,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(246,178));
-    points.push_back(Point(194,186));
-    points.push_back(Point(209,242));
-    points.push_back(Point(188,242));
-    points.push_back(Point(292,186));
-    points.push_back(Point(216,49));
-    points.push_back(Point(145,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,224));
-    points.push_back(Point(169,136));
-    points.push_back(Point(184,368));
-    points.push_back(Point(199,277));
-    points.push_back(Point(214,262));
-    points.push_back(Point(223,168));
-    points.push_back(Point(213,158));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,180));
-    points.push_back(Point(169,191));
-    points.push_back(Point(184,285));
-    points.push_back(Point(199,310));
-    points.push_back(Point(214,363));
-    points.push_back(Point(223,369));
-    points.push_back(Point(213,258));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(228,178));
-    points.push_back(Point(319,186));
-    points.push_back(Point(321,242));
-    points.push_back(Point(223,242));
-    points.push_back(Point(173,186));
-    points.push_back(Point(336,49));
-    points.push_back(Point(253,42));
-    points.push_back(Point(186,39));
-    points.push_back(Point(178,40));
-    points.push_back(Point(223,58));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(127,197));
-    points.push_back(Point(168,369));
-    points.push_back(Point(326,358));
-    points.push_back(Point(353,331));
-    points.push_back(Point(364,150));
-    points.push_back(Point(298,139));
-    points.push_back(Point(131,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(270,197));
-    points.push_back(Point(195,369));
-    points.push_back(Point(374,358));
-    points.push_back(Point(198,331));
-    points.push_back(Point(291,150));
-    points.push_back(Point(202,139));
-    points.push_back(Point(213,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(167,197));
-    points.push_back(Point(312,369));
-    points.push_back(Point(145,358));
-    points.push_back(Point(306,331));
-    points.push_back(Point(317,150));
-    points.push_back(Point(225,139));
-    points.push_back(Point(299,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(164,197));
-    points.push_back(Point(237,369));
-    points.push_back(Point(360,358));
-    points.push_back(Point(139,331));
-    points.push_back(Point(320,150));
-    points.push_back(Point(264,139));
-    points.push_back(Point(316,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(354,197));
-    points.push_back(Point(323,369));
-    points.push_back(Point(242,358));
-    points.push_back(Point(346,331));
-    points.push_back(Point(333,150));
-    points.push_back(Point(373,139));
-    points.push_back(Point(262,147));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    points.push_back(Point(296,143));
-    points.push_back(Point(203,295));
-    points.push_back(Point(223,206));
-    points.push_back(Point(295,161));
-    points.push_back(Point(247,166));
-    points.push_back(Point(225,342));
-    points.push_back(Point(323,296));
-
-    testpoints.push_back(points);
-    points.clear();
-
-    for( int i = 0; i < testpoints.size(); i++ )
+    int pointarray[] =
     {
+        127,124,127,140,138,217,149,240,153,241,156,122,0,0,
+        127,197,168,369,326,358,353,331,364,150,298,139,131,147,0,0,
+        127,242,187,242,364,186,266,42,186,39,178,40,150,49,0,0,
+        139,331,237,369,360,358,320,150,316,147,264,139,164,197,0,0,
+        140,42,180,242,350,242,322,186,231,49,186,39,0,0,
+        143,331,153,369,175,358,354,150,339,147,253,139,0,0,
+        144,138,152,178,169,203,179,110,149,113,0,0,
+        145,358,312,369,317,150,299,147,225,139,167,197,0,0,
+        145,42,188,242,209,242,292,186,223,58,216,49,186,39,0,0,
+        148,255,188,253,189,239,185,157,168,135,0,0,
+        150,42,163,186,273,242,303,242,350,186,260,49,186,39,0,0,
+        167,178,169,186,184,242,199,242,214,186,223,58,223,49,213,42,186,39,178,40,0,0,
+        167,180,184,285,214,363,223,369,223,58,186,39,178,40,0,0,
+        167,224,184,368,214,262,223,168,223,58,186,39,178,40,169,136,0,0,
+        169,173,189,219,214,210,219,188,210,141,0,0,
+        173,186,223,242,321,242,336,49,253,42,186,39,178,40,0,0,
+        175,81,175,116,227,136,222,75,183,78,0,0,
+        178,40,245,242,313,242,313,186,229,42,186,39,0,0,
+        195,369,374,358,291,150,202,139,0,0,
+        242,358,323,369,346,331,373,139,262,147,0,0,
+        88,113,88,115,100,193,111,204,109,127,93,114,0,0,
+
+        100,160,102,168,105,166,114,153,111,98,104,133,0,0,
+        104,160,113,181,114,183,132,126,107,96,0,0,
+        109,143,125,168,132,171,128,135,116,116,0,0,
+        109,203,114,224,124,155,113,120,0,0,
+        110,128,112,165,127,176,136,155,134,109,0,0,
+        110,150,123,224,129,215,134,178,139,117,113,121,0,0,
+        118,174,150,193,150,147,134,102,121,124,0,0,
+        121,198,126,226,134,213,137,191,141,117,127,142,0,0,
+        122,181,122,207,130,213,153,174,139,123,123,152,0,0,
+        123,133,128,176,142,168,147,115,142,100,129,108,0,0,
+        125,130,137,173,151,222,162,212,164,205,165,165,133,126,0,0,
+        126,173,149,182,153,146,153,139,152,128,140,118,127,155,0,0,
+        127,131,129,203,147,232,149,204,148,190,138,133,0,0,
+        127,171,127,332,146,360,371,330,371,205,0,0,
+        128,232,206,318,217,320,336,337,364,267,374,173,357,155,251,127,154,136,138,193,0,0,
+        130,366,368,366,362,322,318,250,281,190,260,179,152,152,141,190,0,0,
+        132,190,140,231,165,236,174,129,150,127,133,135,0,0,
+        133,235,159,223,151,166,141,134,0,0,
+        134,108,137,153,145,187,155,179,163,136,154,127,0,0,
+        135,147,184,324,350,333,372,249,276,156,190,144,0,0,
+        135,186,137,197,142,170,150,121,139,137,138,143,0,0,
+        137,177,143,199,155,139,151,128,142,107,141,106,0,0,
+        139,59,145,87,154,111,166,72,149,62,0,0,
+        142,164,143,190,146,232,153,230,166,201,183,129,150,135,0,0,
+        143,247,176,232,179,218,178,179,175,128,158,171,0,0,
+        144,167,146,229,162,248,179,156,176,142,152,140,0,0,
+        144,207,148,210,178,158,182,137,176,113,156,169,0,0,
+        145,181,158,202,160,198,161,122,153,150,0,0,
+        145,193,152,226,161,250,172,181,174,147,148,134,0,0,
+        145,84,147,94,178,119,182,88,174,84,147,77,0,0,
+        149,123,150,172,151,200,158,216,193,170,151,123,0,0,
+        149,150,150,193,182,122,164,114,0,0,
+        152,129,161,166,173,200,197,161,193,136,163,130,0,0,
+        155,167,158,191,160,191,168,179,172,154,170,110,156,134,0,0,
+        156,254,176,247,195,195,201,139,184,136,173,164,0,0,
+        158,85,174,98,195,107,187,67,170,70,164,73,0,0,
+        163,106,163,160,165,188,183,210,209,190,0,0,
+        165,154,177,184,211,227,212,146,170,118,0,0,
+        165,258,209,264,219,178,200,149,167,214,0,0,
+        166,138,167,191,189,244,193,218,201,142,0,0,
+        170,137,171,224,222,202,225,147,215,124,209,116,0,0,
+        174,167,175,211,185,261,195,270,220,229,218,216,182,169,0,0,
+        174,171,176,214,203,194,223,133,224,120,178,126,0,0,
+        174,202,198,254,224,268,221,225,209,170,175,187,0,0,
+        175,203,196,226,215,159,216,117,200,126,0,0,
+        177,173,180,224,205,156,194,116,181,137,0,0,
+        178,187,198,198,228,129,215,121,185,114,0,0,
+        183,191,215,205,214,164,199,117,190,155,185,180,0,0,
+        184,148,203,231,236,373,321,342,351,316,358,273,273,166,192,136,0,0,
+        193,225,211,232,225,226,217,153,203,118,0,0,
+        203,295,225,342,323,296,296,143,247,166,223,206,0,0,
+        241,133,249,179,286,144,290,126,255,102,0,0,
+        243,174,281,134,271,92,256,134,0,0,
+        251,97,273,172,320,164,294,129,0,0,
+        31,88,35,131,40,138,40,128,39,105,38,88,32,80,0,0,
+        49,119,55,175,56,184,60,178,57,148,50,104,0,0,
+        58,115,58,148,60,148,70,122,66,98,60,82,0,0,
+        66,97,77,154,78,159,81,153,80,132,79,115,73,88,0,0,
+        68,131,68,152,73,190,78,180,78,143,69,108,0,0,
+        73,128,74,159,78,195,84,201,84,185,82,118,75,108,0,0,
+        78,95,79,130,89,165,97,160,98,140,80,95,0,0,
+        81,108,83,127,89,166,96,189,95,157,87,128,0,0,
+        85,174,93,165,101,138,106,113,95,117,0,0,
+        96,191,110,209,107,117,101,139,0,0,
+        98,175,105,179,118,179,126,169,128,118,99,139,0,0,
+        99,121,110,168,116,166,116,164,110,103,0,0,
+        130,191,154,337,301,329,362,315,350,242,321,156,293,127,194,165,0,0
+    };
+
+    for( int i = 0; i < 1219; i+=2 )
+    {
+        int x=pointarray[i];
+        int y=pointarray[i+1];
+
+        if( x+y > 0 )
+            points.push_back(Point(x,y));
+        else
+        {
+            testpoints.push_back(points);
+            points.clear();
+        }
+    }
+
+    int i = -1;
+
+    for(;;)
+    {
+        if(i < 86)
+            i++;
+        else
+        {
+            // Generate a random set of points
+            testpoints[i].clear();
+            int count = rng.uniform(4, 30);
+            for( int j = 0; j < count; j++ )
+            {
+                Point pt;
+                pt.x = rng.uniform(img.cols/4, img.cols*3/4);
+                pt.y = rng.uniform(img.rows/4, img.rows*3/4);
+
+                testpoints[i].push_back(pt);
+            }
+        }
+
         vector<Point2f> triangle1;
         vector<Point2f> triangle2;
 
         double area1,area2;
 
-        // Draw the points
-        img = Scalar::all(0);
-        for( int j = 0; j < testpoints[i].size(); j++ )
-            circle( img, testpoints[i][j], 2, Scalar(0, 0, 255), FILLED, LINE_AA );
+        double triangle1point = 0;
+        double triangle2point = 0;
 
+        img = Scalar::all(0);
 
         area1 = cv::minEnclosingTriangle(testpoints[i], triangle1);
-        cout << "area1 : " << area1 << "\n";
+
 
         if( triangle1.size() < 3 )
         {
             cout << "cv::minEnclosingTriangle FAILED!! \n";
-            // cout << testpoints[i] << "\n";
         }
         else
             // Draw the triangle
             for( int k = 0; k < 3; k++ )
-                line(img, triangle1[k], triangle1[(k+1)%3], Scalar(255, 255, 0), 3, LINE_AA);
-
-        imshow( "minEnclosingTriangle test - OpenCV", img );
-        waitKey(1);
+            {
+                triangle1point+=triangle1[k].x+triangle1[k].y;
+                line(img, triangle1[k], triangle1[(k+1)%3], Scalar(0, 255, 0), 3, LINE_AA);
+            }
 
         std::vector<cv::Point2f> polygon;
 
         minEnclosingTriangle::createConvexHull(testpoints[i], polygon);
-     //   cout << "\n" << Mat(polygon) << "\n" << "\n";
 
         minEnclosingTriangle::findMinEnclosingTriangle(polygon, triangle2, area2);
 
-
-
-          cout << "area2 : " << area2 << "\n";
         if( triangle2.size() < 3 )
         {
-            cout << testpoints[i] << "\n";
+            cout << "minEnclosingTriangle::findMinEnclosingTriangle FAILED!! \n";
         }
         else
             // Draw the triangle
             for( int k = 0; k < 3; k++ )
-                line(img, triangle2[k], triangle2[(k+1)%3], Scalar(0, 0, 255), 1, LINE_AA);
-
-        imshow( "minEnclosingTriangle test - OpenCV", img );
-
-
-        char key = (char)waitKey(0);
-        if( key == 27 || key == 'q' || key == 'Q' ) // 'ESC'
-            break;
-
-
-    }
-
-    return 0;
-}
-
-int mainB( int /*argc*/, char** /*argv*/ )
-{
-    Mat img(500, 500, CV_8UC3);
-
-    RNG& rng = theRNG();
-
-    for(;;)
-    {
-        int i, count = rng.uniform(4, 30);
-        vector<Point> points;
-
-        // Generate a random set of points
-        for( i = 0; i < count; i++ )
-        {
-            Point pt;
-            pt.x = rng.uniform(img.cols/4, img.cols*3/4);
-            pt.y = rng.uniform(img.rows/4, img.rows*3/4);
-
-            points.push_back(pt);
-        }
-
-        img = Scalar::all(0);
+            {
+                triangle2point+=triangle2[k].x+triangle2[k].y;
+                line(img, triangle2[k], triangle2[(k+1)%3], Scalar(255, 0, 0), 1, LINE_AA);
+            }
 
         // Draw the points
-        for( i = 0; i < count; i++ )
-            circle( img, points[i], 1, Scalar(0, 0, 255), FILLED, LINE_AA );
+        for( int j = 0; j < testpoints[i].size(); j++ )
+            circle( img, testpoints[i][j], 2, Scalar(0, 0, 255), FILLED, LINE_AA );
 
-        // Find the minimum area enclosing triangle
-        vector<Point2f> triangle1;
-        vector<Point2f> triangle2;
-
-        double area1,area2,triangle1point,triangle2point;
-
-        triangle1point = 0;
-        triangle2point = 0;
-
-       // cout << points << "\n";
-        area1 = cv::minEnclosingTriangle(points, triangle1);
-
-
-        std::vector<cv::Point2f> polygon;
-
-        minEnclosingTriangle::createConvexHull(points, polygon);
-     //   cout << "\n" << Mat(polygon) << "\n" << "\n";
-
-        minEnclosingTriangle::findMinEnclosingTriangle(polygon, triangle2, area2);
-
-
-
-        if( triangle1.size() < 3 )
+        if( abs( triangle1point - triangle2point)> 0.01)
         {
-            cout << points << "\n";
-        }
-        else
-            // Draw the triangle
-            for( int k = 0; k < 3; k++ )
-                {
-                triangle1point+=triangle1[k].x+triangle1[k].y;
-                line(img, triangle1[k], triangle1[(k+1)%3], Scalar(0, 255, 0), 3, LINE_AA);
-                }
-
-
-        if( triangle2.size() < 3 )
-        {
-            cout << points << "\n";
-        }
-        else
-            // Draw the triangle
-            for( int k = 0; k < 3; k++ )
-                {
-                triangle2point+=triangle2[k].x+triangle2[k].y;
-                line(img, triangle2[k], triangle2[(k+1)%3], Scalar(0, 0, 255), 1, LINE_AA);
-                }
-
-
-       // imshow( "minEnclosingTriangle test - OpenCV", img );
-
-        if( abs( triangle1point - triangle2point)> 0.1)
-        {
-            cout << "area1 : " << area1 << "\n";
-            cout << "area2 : " << area2 << "\n";
-
+            cout << "area1 : " << area1 << "  - computed with current minEnclosingTriangle function\n";
+            cout << "area2 : " << area2 << "  - computed with fixed minEnclosingTriangle function \n";
             cout << triangle1 << "\n";
             cout << triangle2 << "\n";
-            cout << points << "\n";
-           imshow( "minEnclosingTriangle test - OpenCV", img );
-            char key = (char)waitKey(1);
-            if( key == 27 || key == 'q' || key == 'Q' ) // 'ESC'
-                break;
+            cout << polygon << "\n";
+            imshow( "minEnclosingTriangle test - OpenCV", img );
+            waitKey(2000);
         }
 
-        waitKey(1);
+        imshow( "minEnclosingTriangle test - OpenCV", img );
+        char key = (char)waitKey(1);
+        if( key == 27 || key == 'q' || key == 'Q' ) // 'ESC'
+            break;
     }
 
     return 0;
