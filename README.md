@@ -1,6 +1,6 @@
 # opencv_samples
 
-Here you will find sample source code of c++ using Opencv3
+Here you will find sample source code of c++ using OpenCV library
 
 most of them collected from http://answers.opencv.org like listed below
 
