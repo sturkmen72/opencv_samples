@@ -4,11 +4,9 @@ const char *eyeCascadeFilename2 = "haarcascade_mcs_lefteye.xml"; // Basic eye de
 
 const char *windowName = "WebcamFaceRec";   // Name shown in the GUI window.
 
-#include <stdio.h>
 #include <vector>
 #include <string>
 #include <iostream>
-#include "detectObject.h"
 
 #include "opencv2/opencv.hpp"
 
@@ -118,7 +116,7 @@ void detectLargestObject(const Mat &img, CascadeClassifier &cascade, Rect &large
 
 }
 
-void initDetectors(CascadeClassifier &faceCascade, CascadeClassifier &eyeCascade2)
+void initDetectors(CascadeClassifier &faceCascade, CascadeClassifier &eyeCascade1, CascadeClassifier &eyeCascade2)
 {
     // Load the Face Detection cascade classifier xml file.
     try     // Surround the OpenCV call by a try/catch block so we can give a useful error message!
@@ -139,6 +137,19 @@ void initDetectors(CascadeClassifier &faceCascade, CascadeClassifier &eyeCascade
 
     try     // Surround the OpenCV call by a try/catch block so we can give a useful error message!
     {
+        eyeCascade1.load(eyeCascadeFilename1);
+    }
+    catch (cv::Exception &e) {}
+    if (eyeCascade1.empty())
+    {
+        cerr << "ERROR: Could not load 1st Eye Detection cascade classifier [" << eyeCascadeFilename1<< "]!" << endl;
+        cerr << "Copy the file from your OpenCV data folder (eg: 'C:\\OpenCV\\data\\haarcascades') into this WebcamFaceRec folder." << endl;
+        exit(1);
+    }
+    cout << "Loaded the 1st Eye Detection cascade classifier [" << eyeCascadeFilename1 << "]." << endl;
+
+    try     // Surround the OpenCV call by a try/catch block so we can give a useful error message!
+    {
         eyeCascade2.load(eyeCascadeFilename2);
     }
     catch (cv::Exception &e) {}
@@ -148,9 +159,7 @@ void initDetectors(CascadeClassifier &faceCascade, CascadeClassifier &eyeCascade
         cerr << "Copy the file from your OpenCV data folder (eg: 'C:\\OpenCV\\data\\haarcascades') into this WebcamFaceRec folder." << endl;
         exit(1);
     }
-    cout << "Loaded the 1st Eye Detection cascade classifier [" << eyeCascadeFilename2 << "]." << endl;
-
-
+    cout << "Loaded the 2nd Eye Detection cascade classifier [" << eyeCascadeFilename2 << "]." << endl;
 
 
 }
@@ -303,7 +312,7 @@ int main()
     CascadeClassifier eyeCascade2;
 
     Rect faceRect;
-    VideoCapture videoCapture("n.mp4");
+    VideoCapture videoCapture( 0 );
 
 
 
@@ -312,14 +321,14 @@ int main()
     cout << "Compiled with OpenCV version " << CV_VERSION << endl << endl;
 
     // Load the face and 1 or 2 eye detection XML classifiers.
-    initDetectors(faceCascade, eyeCascade2);
+    initDetectors(faceCascade, eyeCascade1, eyeCascade2);
 
     Mat thresh, gray;
     while (1)
     {
         Mat frame;
         videoCapture >> frame;
-        detectLargestObject(frame, faceCascade, faceRect);
+        detectLargestObject(frame, faceCascade, faceRect, frame.cols);
         if (faceRect.width > 0)
         {
             // modification is begin here
