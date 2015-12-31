@@ -13,6 +13,21 @@ const char *windowName = "WebcamFaceRec";   // Name shown in the GUI window.
 using namespace cv;
 using namespace std;
 
+Rect shrinkRect( Rect rect, int width_percent, int height_percent )
+{
+    if ( width_percent > 100 ) width_percent = 100;
+    if ( height_percent > 100 ) height_percent = 100;
+
+    Rect newrect;
+    newrect.width = ( rect.width * width_percent ) / 100;
+    newrect.height = ( rect.height * height_percent ) / 100;
+    newrect.x = rect.x + ( rect.width - newrect.width ) / 2;
+    newrect.y = rect.y + ( rect.height - newrect.height ) / 2;
+
+    return newrect;
+}
+
+
 // Search for just a single object in the image, such as the largest face, storing the result into 'largestObject'.
 // Can use Haar cascades or LBP cascades for Face Detection, or even eye, mouth, or car detection.
 // Input is temporarily shrunk to 'scaledWidth' for much faster detection, since 200 is enough to find faces.
@@ -359,6 +374,12 @@ int main()
 
             rectangle(faceImg, searchedLeftEye, Scalar(0, 255, 0), 2, 8, 0);
             rectangle(faceImg, searchedRightEye, Scalar(0, 255, 0), 2, 8, 0);
+
+            searchedLeftEye = shrinkRect( searchedLeftEye, 50, 50 );
+            searchedRightEye = shrinkRect( searchedRightEye, 50, 50 );
+
+            rectangle(faceImg, searchedLeftEye, Scalar(0, 255, 255 ), 2, 8, 0);
+            rectangle(faceImg, searchedRightEye, Scalar(0, 255, 255 ), 2, 8, 0);
 
             searchedRightEye.y += searchedRightEye.height / 3;
 
