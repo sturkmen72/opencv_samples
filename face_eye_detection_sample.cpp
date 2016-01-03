@@ -1,5 +1,5 @@
 const char *faceCascadeFilename = "lbpcascade_frontalface.xml";     // LBP face detector.
-const char *eyeCascadeFilename1 = "haarcascade_mcs_rightteye.xml";               // Basic eye detector for open eyes only.
+const char *eyeCascadeFilename1 = "haarcascade_mcs_righteye.xml";               // Basic eye detector for open eyes only.
 const char *eyeCascadeFilename2 = "haarcascade_mcs_lefteye.xml"; // Basic eye detector for open eyes if they might wear glasses.
 
 const char *windowName = "WebcamFaceRec";   // Name shown in the GUI window.
@@ -237,7 +237,6 @@ void detectBothEyes(const Mat &face, CascadeClassifier &eyeCascade1, CascadeClas
     float newHeight = 0.3*heightY;
     float newX = centerX - 0.5*newWidth;
     float newY = centerY - 0.5*newHeight;
-
     Mat new_rect= face(Rect(newX, newY, newWidth, newHeight));
     */
 
@@ -245,14 +244,14 @@ void detectBothEyes(const Mat &face, CascadeClassifier &eyeCascade1, CascadeClas
 
 
 
-    Mat binaryMat;
-    //Apply thresholding
-    cv::threshold(topLeftOfFace, binaryMat, 60, 255, cv::THRESH_BINARY);
 
-    //imshow("threshold   ", binaryMat);
+
+
+
 
     Mat topRightOfFace = face(Rect(rightX, topY, widthX, heightY));
-    //imshow("topRightOfFace  ", topRightOfFace);
+
+
 
 
     Rect leftEyeRect, rightEyeRect;
@@ -327,7 +326,7 @@ int main()
     CascadeClassifier eyeCascade2;
 
     Rect faceRect;
-    VideoCapture videoCapture( 0 );
+    VideoCapture videoCapture(0 );
 
 
 
@@ -375,25 +374,21 @@ int main()
             rectangle(faceImg, searchedLeftEye, Scalar(0, 255, 0), 2, 8, 0);
             rectangle(faceImg, searchedRightEye, Scalar(0, 255, 0), 2, 8, 0);
 
-            searchedLeftEye = shrinkRect( searchedLeftEye, 50, 50 );
-            searchedRightEye = shrinkRect( searchedRightEye, 50, 50 );
+           searchedRightEye.y += searchedRightEye.height / 3;
+    		searchedRightEye.height -= searchedRightEye.height / 3;
 
-            rectangle(faceImg, searchedLeftEye, Scalar(0, 255, 255 ), 2, 8, 0);
-            rectangle(faceImg, searchedRightEye, Scalar(0, 255, 255 ), 2, 8, 0);
+			int val = searchedRightEye.height;
 
-            searchedRightEye.y += searchedRightEye.height / 3;
+			searchedRightEye = shrinkRect(searchedRightEye, 50, val);// reduces width and height %50
 
-            searchedRightEye.height -= searchedRightEye.height / 3;
-
-            Mat eye_region = faceImg(searchedRightEye);
-
-            cvtColor(eye_region, gray, CV_BGR2GRAY);
-
-            threshold(gray, thresh, 60, 255, THRESH_BINARY);
+			Mat eye_region = faceImg(searchedRightEye);
 
 
-            imshow("eye_  video", thresh);
-        }  // modification end
+
+			imshow("eye_  video", eye_region);
+
+
+        }
 
         imshow("video", frame);
         // Press 'c' to escape
