@@ -67,9 +67,9 @@ void TickMeter::stop()
     startTime = 0;
 }
 
-float euclideanDist(cv::Point2f& p, cv::Point2f& q)
+float euclideanDist(cv::Point2f& a, cv::Point2f& b)
 {
-    cv::Point diff = p - q;
+    cv::Point2f diff = a - b;
     return cv::sqrt(diff.x*diff.x + diff.y*diff.y);
 }
 
@@ -85,20 +85,21 @@ int main(int argc, char**argv)
 {
     cv::Mat img(500,500,CV_8UC3,cv::Scalar(0,0,0));
     cv::Point2f a(0,0);
-    cv::Point2f b(15000,15000);
+    cv::Point2f b(std::numeric_limits<int>::max(),std::numeric_limits<int>::max());
 
+    std::cout << "a : " << a <<  " - b : " << b << std::endl << std::endl;
     std::cout << "euclideanDist : " << euclideanDist( a, b ) << std::endl;
     std::cout << "distanceBtwPoints : " << distanceBtwPoints( a, b ) << std::endl;
-    std::cout << "cv::norm : " << cv::norm( a - b ) << std::endl;
+    std::cout << "cv::norm : " << cv::norm( a - b ) << std::endl << std::endl;
 
     cv::RNG& rng = cv::theRNG();
     std::vector<cv::Point2f> points;
 
     for( int i = 0; i < 15000; i++ )
     {
-        cv::Point pt;
-        pt.x = rng.uniform(0, 15000);
-        pt.y = rng.uniform(0, 15000);
+        cv::Point2f pt;
+        pt.x = rng.uniform(0, std::numeric_limits<int>::max());
+        pt.y = rng.uniform(0, std::numeric_limits<int>::max());
         points.push_back(pt);
     }
 
