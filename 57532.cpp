@@ -6,7 +6,13 @@ using namespace std;
 
 int main( int argc, char** argv )
 {
-    Mat src = imread( argv[1] );
+    char* filename = argc >= 2 ? argv[1] : (char*)"57532.png";
+    Mat src = imread( filename );
+
+    if(src.empty())
+    {
+        return -1;
+    }
 
     imshow("source",src);
 
@@ -16,7 +22,7 @@ int main( int argc, char** argv )
 
     dst = dst - Scalar(127,127,0);
     imshow("result 1",dst);
-    waitKey();
+
     Mat bgr[3];
     split(src,bgr);
 
