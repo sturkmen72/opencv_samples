@@ -1,4 +1,3 @@
-
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <Windows.h>
@@ -7,31 +6,41 @@
 using namespace std;
 using namespace cv;
 
-Mat hwnd2mat(HWND hwnd)
+class hwnd2Mat
 {
-    HDC hwindowDC,hwindowCompatibleDC;
+public:
+    hwnd2Mat(HWND hwindow, float scale = 1);
+    virtual ~hwnd2Mat();
+    virtual void read();
+    Mat image;
 
-    int height,width,srcheight,srcwidth;
+private:
+    HWND hwnd;
+    HDC hwindowDC, hwindowCompatibleDC;
+    int height, width, srcheight, srcwidth;
     HBITMAP hbwindow;
-    Mat src;
     BITMAPINFOHEADER  bi;
+};
 
-    hwindowDC=GetDC(hwnd);
-    hwindowCompatibleDC=CreateCompatibleDC(hwindowDC);
-    SetStretchBltMode(hwindowCompatibleDC,COLORONCOLOR);
+hwnd2Mat::hwnd2Mat(HWND hwindow, float scale)
+{
+    hwnd = hwindow;
+    hwindowDC = GetDC(hwnd);
+    hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
+    SetStretchBltMode(hwindowCompatibleDC, COLORONCOLOR);
 
     RECT windowsize;    // get the height and width of the screen
     GetClientRect(hwnd, &windowsize);
 
     srcheight = windowsize.bottom;
     srcwidth = windowsize.right;
-    height = windowsize.bottom/1;  //change this to whatever size you want to resize to
-    width = windowsize.right/1;
+    height = (int)(windowsize.bottom * scale);
+    width = (int)(windowsize.right * scale);
 
-    src.create(height,width,CV_8UC4);
+    image.create(height, width, CV_8UC4);
 
     // create a bitmap
-    hbwindow = CreateCompatibleBitmap( hwindowDC, width, height);
+    hbwindow = CreateCompatibleBitmap(hwindowDC, width, height);
     bi.biSize = sizeof(BITMAPINFOHEADER);    //http://msdn.microsoft.com/en-us/library/windows/window/dd183402%28v=vs.85%29.aspx
     bi.biWidth = width;
     bi.biHeight = -height;  //this is the line that makes it draw upside down or not
@@ -46,29 +55,32 @@ Mat hwnd2mat(HWND hwnd)
 
     // use the previously created device context with the bitmap
     SelectObject(hwindowCompatibleDC, hbwindow);
-    // copy from the window device context to the bitmap device context
-    StretchBlt( hwindowCompatibleDC, 0,0, width, height, hwindowDC, 0, 0,srcwidth,srcheight, SRCCOPY); //change SRCCOPY to NOTSRCCOPY for wacky colors !
-    GetDIBits(hwindowCompatibleDC,hbwindow,0,height,src.data,(BITMAPINFO *)&bi,DIB_RGB_COLORS);  //copy from hwindowCompatibleDC to hbwindow
+    read();
+};
 
+void hwnd2Mat::read()
+{
+    // copy from the window device context to the bitmap device context
+    StretchBlt(hwindowCompatibleDC, 0, 0, width, height, hwindowDC, 0, 0, srcwidth, srcheight, SRCCOPY); //change SRCCOPY to NOTSRCCOPY for wacky colors !
+    GetDIBits(hwindowCompatibleDC, hbwindow, 0, height, image.data, (BITMAPINFO*)& bi, DIB_RGB_COLORS);  //copy from hwindowCompatibleDC to hbwindow
+};
+
+hwnd2Mat::~hwnd2Mat()
+{
     // avoid memory leak
-    DeleteObject (hbwindow);
+    DeleteObject(hbwindow);
     DeleteDC(hwindowCompatibleDC);
     ReleaseDC(hwnd, hwindowDC);
+};
 
-    return src;
-}
-
-int main(int argc, char **argv)
+int main()
 {
     HWND hwndDesktop = GetDesktopWindow();
-    int key;
+    hwnd2Mat desk(hwndDesktop);
 
-    while( key != 27 )
+    while (waitKey(1) != 27)
     {
-        Mat src = hwnd2mat(hwndDesktop);
-        imshow("output", src);
-        key = waitKey(60);
+        desk.read();
+        imshow("output", desk.image);
     }
-
 }
-
