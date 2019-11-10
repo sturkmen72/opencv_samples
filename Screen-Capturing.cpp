@@ -1,5 +1,6 @@
-#include "opencv2/imgproc.hpp"
-#include "opencv2/highgui.hpp"
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/videoio.hpp>
 #include <Windows.h>
 #include <iostream>
 
@@ -62,7 +63,7 @@ void hwnd2Mat::read()
 {
     // copy from the window device context to the bitmap device context
     StretchBlt(hwindowCompatibleDC, 0, 0, width, height, hwindowDC, 0, 0, srcwidth, srcheight, SRCCOPY); //change SRCCOPY to NOTSRCCOPY for wacky colors !
-    GetDIBits(hwindowCompatibleDC, hbwindow, 0, height, image.data, (BITMAPINFO*)& bi, DIB_RGB_COLORS);  //copy from hwindowCompatibleDC to hbwindow
+    GetDIBits(hwindowCompatibleDC, hbwindow, 0, height, image.data, (BITMAPINFO*)&bi, DIB_RGB_COLORS);  //copy from hwindowCompatibleDC to hbwindow
 };
 
 hwnd2Mat::~hwnd2Mat()
@@ -75,12 +76,32 @@ hwnd2Mat::~hwnd2Mat()
 
 int main()
 {
-    HWND hwndDesktop = GetDesktopWindow();
-    hwnd2Mat desk(hwndDesktop);
+    Mat ui(40, 400, CV_8UC3, Scalar(0, 130, 0));
+    putText(ui, "Press Esc to stop capturing", Point(30,30), FONT_HERSHEY_COMPLEX, 0.7,
+        Scalar(0, 0, 255), 1);
+    Mat bgrImg;
+    hwnd2Mat capDesktop(GetDesktopWindow());
 
-    while (waitKey(1) != 27)
+    VideoWriter writer;
+    int codec = VideoWriter::fourcc('X', 'V', 'I', 'D');
+    double fps = 10.0;
+    string filename = "./desktop_capture.avi";
+    writer.open(filename, codec, fps, capDesktop.image.size(), true);
+    // check if we succeeded
+    if (!writer.isOpened()) {
+        cerr << "Could not open the output video file for write\n";
+        return -1;
+    }
+
+    while ( true )
     {
-        desk.read();
-        imshow("output", desk.image);
+        capDesktop.read();
+        cvtColor(capDesktop.image, bgrImg, COLOR_BGRA2BGR);
+        writer << bgrImg;
+        imshow("desktop capture", ui);
+        int key = waitKey(5);
+
+        if (key == 27)
+            break;
     }
 }
