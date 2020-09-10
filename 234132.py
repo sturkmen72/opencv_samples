@@ -15,7 +15,7 @@ def invert_font_color(path):
         mask_roi=a[yOffset:,xOffset:][:height,:width]
 
         mean_scalar = cv2.mean(roi,mask_roi)
-        if mean_scalar[0] > 250:
+        if mean_scalar[0] > 230:
             image[yOffset:,xOffset:][:height,:width][:, :, 0] = 0
             image[yOffset:,xOffset:][:height,:width][:, :, 1] = 0
             image[yOffset:,xOffset:][:height,:width][:, :, 2] = 0
